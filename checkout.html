@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemesanan & Checkout Layanan — FARKAN Consult</title>
+  <meta name="description" content="Halaman checkout resmi pemesanan layanan arsitektur, desain interior, dan konstruksi FARKAN Consult dengan pembayaran aman via TriPay.">
+  <link rel="icon" type="image/png" href="assets/images/farkan_logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0b0d11;
+      --bg-secondary: #12151c;
+      --bg-card: rgba(22, 26, 35, 0.92);
+      --gold-primary: #d4af37;
+      --gold-gradient: linear-gradient(135deg, #f5d77f 0%, #d4af37 50%, #aa820a 100%);
+      --text-pure: #ffffff;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border-light: rgba(255, 255, 255, 0.08);
+      --border-gold: rgba(212, 175, 55, 0.35);
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.7;
+      padding-bottom: 70px;
+    }
+    header {
+      background: rgba(11, 13, 17, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-light);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 16px 24px;
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-brand img {
+      height: 42px;
+      width: auto;
+    }
+    .logo-brand span {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      color: var(--text-pure);
+    }
+    .logo-brand span b {
+      color: var(--gold-primary);
+    }
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .btn-nav {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .btn-nav:hover {
+      color: var(--gold-primary);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 40px auto 0;
+      padding: 0 20px;
+    }
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .badge-secure {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-primary);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .page-title {
+      font-family: var(--font-heading);
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--text-pure);
+      margin-bottom: 8px;
+    }
+    .page-desc {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* Checkout Grid */
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .c-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 26px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      margin-bottom: 24px;
+    }
+    .c-card-title {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-pure);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .c-card-title span.step {
+      width: 26px;
+      height: 26px;
+      background: var(--gold-gradient);
+      color: #0b0d11;
+      font-size: 13px;
+      font-weight: 800;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Package Selector */
+    .pkg-option {
+      border: 1px solid var(--border-light);
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+    .pkg-option:hover {
+      border-color: rgba(212, 175, 55, 0.5);
+      background: rgba(212, 175, 55, 0.04);
+    }
+    .pkg-option.active {
+      border-color: var(--gold-primary);
+      background: rgba(212, 175, 55, 0.08);
+      box-shadow: 0 0 16px rgba(212, 175, 55, 0.15);
+    }
+    .pkg-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .pkg-radio {
+      accent-color: var(--gold-primary);
+      transform: scale(1.2);
+    }
+    .pkg-name {
+      font-weight: 700;
+      color: var(--text-pure);
+      font-size: 15px;
+    }
+    .pkg-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .pkg-price {
+      text-align: right;
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold-primary);
+      white-space: nowrap;
+    }
+
+    /* Form Fields */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      background: #171b24;
+      border: 1px solid var(--border-light);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text-pure);
+      font-family: var(--font-body);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* Payment Methods */
+    .pay-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 10px;
+    }
+    .pay-option {
+      border: 1px solid var(--border-light);
+      background: #171b24;
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pay-option:hover {
+      border-color: var(--gold-primary);
+    }
+    .pay-option.active {
+      border-color: var(--gold-primary);
+      background: rgba(212, 175, 55, 0.1);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+    }
+    .pay-icon {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+    .pay-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Summary Card (Right) */
+    .summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 16px;
+      padding: 26px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      position: sticky;
+      top: 90px;
+    }
+    .summary-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-pure);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .summary-item.highlight {
+      color: var(--text-pure);
+      font-weight: 600;
+    }
+    .summary-total {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .summary-total-label {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-pure);
+    }
+    .summary-total-val {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--gold-primary);
+    }
+    .btn-submit {
+      width: 100%;
+      background: var(--gold-gradient);
+      color: #0b0d11;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(212, 175, 55, 0.5);
+    }
+    .trust-badges {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Modal Invoice Simulation */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-card {
+      background: #151922;
+      border: 1px solid var(--border-gold);
+      border-radius: 20px;
+      max-width: 500px;
+      width: 100%;
+      padding: 30px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+      text-align: center;
+      animation: modalFadeIn 0.3s ease;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .status-badge-pending {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid #f59e0b;
+      color: #fbbf24;
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .va-box {
+      background: #0b0d11;
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 18px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .va-num {
+      font-family: monospace;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold-primary);
+      letter-spacing: 2px;
+    }
+    .btn-copy {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-primary);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    footer {
+      max-width: 1200px;
+      margin: 60px auto 0;
+      text-align: center;
+      border-top: 1px solid var(--border-light);
+      padding-top: 30px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    footer a { color: var(--gold-primary); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <a href="index.html" class="logo-brand">
+        <img src="assets/images/farkan_logo.png" alt="FARKAN Logo">
+        <span>FARKAN <b>CONSULT</b></span>
+      </a>
+      <div class="header-nav">
+        <a href="index.html" class="btn-nav">← Kembali ke Beranda</a>
+        <a href="privacy.html" class="btn-nav" target="_blank">Kebijakan Privasi</a>
+        <a href="terms.html" class="btn-nav" target="_blank">Syarat &amp; Ketentuan</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    <div class="page-header">
+      <span class="badge-secure">🛡️ Halaman Checkout Resmi Terverifikasi</span>
+      <h1 class="page-title">Pemesanan Layanan &amp; Checkout</h1>
+      <p class="page-desc">Silakan pilih paket kebutuhan proyek Anda, lengkapi data pemesanan, dan selesaikan pembayaran aman via TriPay Payment Gateway.</p>
+    </div>
+
+    <form id="checkoutForm" onsubmit="handleCheckout(event)">
+      <div class="checkout-grid">
+        
+        <!-- Kolom Kiri: Pilihan Layanan & Data Klien -->
+        <div class="checkout-left">
+          
+          <!-- Step 1: Pilih Layanan -->
+          <div class="c-card">
+            <h2 class="c-card-title"><span class="step">1</span> Pilih Paket Layanan</h2>
+            
+            <label class="pkg-option active" onclick="selectPackage(this, 'Paket Konsultasi & Survey Lokasi Proyek', 500000, 'Survey fisik ke lokasi, analisa topografi lahan & konsultasi tatap muka')">
+              <div class="pkg-left">
+                <input type="radio" name="package" class="pkg-radio" checked value="500000">
+                <div>
+                  <div class="pkg-name">Paket Konsultasi &amp; Survey Lokasi Proyek</div>
+                  <div class="pkg-desc">Survey fisik ke lokasi, analisa lahan &amp; sesi konsultasi arsitek langsung.</div>
+                </div>
+              </div>
+              <div class="pkg-price">Rp 500.000</div>
+            </label>
+
+            <label class="pkg-option" onclick="selectPackage(this, 'DP Paket Desain Arsitektur & Gambar Kerja (DED)', 3500000, 'Konsep denah 2D, 3D render fasad photorealistic, dan gambar kerja IMB/PBG')">
+              <div class="pkg-left">
+                <input type="radio" name="package" class="pkg-radio" value="3500000">
+                <div>
+                  <div class="pkg-name">DP Desain Arsitektur &amp; DED Lengkap</div>
+                  <div class="pkg-desc">Konsep 2D denah, visualisasi 3D eksterior, dan dokumen gambar kerja DED.</div>
+                </div>
+              </div>
+              <div class="pkg-price">Rp 3.500.000</div>
+            </label>
+
+            <label class="pkg-option" onclick="selectPackage(this, 'DP Paket Desain Interior & Visualisasi 3D', 2500000, 'Desain layout ruangan, pemilihan material, skema pencahayaan & 3D render')">
+              <div class="pkg-left">
+                <input type="radio" name="package" class="pkg-radio" value="2500000">
+                <div>
+                  <div class="pkg-name">DP Desain Interior &amp; Visualisasi 3D</div>
+                  <div class="pkg-desc">Penataan interior ruangan, pemilihan material, skema tata cahaya, &amp; render.</div>
+                </div>
+              </div>
+              <div class="pkg-price">Rp 2.500.000</div>
+            </label>
+
+            <label class="pkg-option" onclick="selectPackage(this, 'Paket Penyusunan RAB & Analisa Struktur Sipil', 1500000, 'Perhitungan detail Bill of Quantities (BOQ), RAB material presisi, analisa struktur')">
+              <div class="pkg-left">
+                <input type="radio" name="package" class="pkg-radio" value="1500000">
+                <div>
+                  <div class="pkg-name">Paket RAB &amp; Analisa Struktur Sipil</div>
+                  <div class="pkg-desc">Perhitungan RAB transparan, BOQ detail material &amp; upah kerja konstruksi.</div>
+                </div>
+              </div>
+              <div class="pkg-price">Rp 1.500.000</div>
+            </label>
+
+            <label class="pkg-option" onclick="selectPackage(this, 'Booking Fee Pelaksanaan Konstruksi Bangun / Renovasi', 5000000, 'Penguncian jadwal tukang, persiapan site lapangan, dan pengadaan awal proyek')">
+              <div class="pkg-left">
+                <input type="radio" name="package" class="pkg-radio" value="5000000">
+                <div>
+                  <div class="pkg-name">Booking Fee Konstruksi &amp; Renovasi</div>
+                  <div class="pkg-desc">Penguncian tim pelaksana kontraktor, persiapan site, &amp; mobilisasi awal.</div>
+                </div>
+              </div>
+              <div class="pkg-price">Rp 5.000.000</div>
+            </label>
+          </div>
+
+          <!-- Step 2: Data Pemesan -->
+          <div class="c-card">
+            <h2 class="c-card-title"><span class="step">2</span> Data Klien &amp; Rincian Proyek</h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Nama Lengkap Klien *</label>
+                <input type="text" id="clientName" class="form-input" required placeholder="Contoh: Bpk. Kurniawan / Ibu Maya">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nomor WhatsApp Aktif *</label>
+                <input type="tel" id="clientPhone" class="form-input" required placeholder="Contoh: 081234567890">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Alamat Email *</label>
+              <input type="email" id="clientEmail" class="form-input" required placeholder="email@domain.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Lokasi / Alamat Rencana Proyek *</label>
+              <input type="text" id="projectLocation" class="form-input" required placeholder="Contoh: Garut Kota / Bandung / Jakarta Selatan">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Catatan Tambahan / Kebutuhan Bangunan</label>
+              <textarea id="projectNotes" class="form-textarea" rows="3" placeholder="Jelaskan perkiraan luas lahan, jumlah lantai, gaya desain yang diinginkan (minimalis, industrial, modern, dsb.)"></textarea>
+            </div>
+          </div>
+
+          <!-- Step 3: Metode Pembayaran -->
+          <div class="c-card">
+            <h2 class="c-card-title"><span class="step">3</span> Metode Pembayaran Resmi (TriPay Gateway)</h2>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">Semua transaksi diproses otomatis dan aman melalui sistem pembayaran terverifikasi Bank Indonesia.</p>
+
+            <div class="pay-grid">
+              <div class="pay-option active" onclick="selectPayment(this, 'QRIS Real-Time')">
+                <div class="pay-icon">📱</div>
+                <div class="pay-name">QRIS (Semua E-Wallet)</div>
+              </div>
+              <div class="pay-option" onclick="selectPayment(this, 'BCA Virtual Account')">
+                <div class="pay-icon">🏦</div>
+                <div class="pay-name">BCA Virtual Account</div>
+              </div>
+              <div class="pay-option" onclick="selectPayment(this, 'Mandiri Virtual Account')">
+                <div class="pay-icon">🏛️</div>
+                <div class="pay-name">Mandiri Virtual Account</div>
+              </div>
+              <div class="pay-option" onclick="selectPayment(this, 'BNI Virtual Account')">
+                <div class="pay-icon">🏦</div>
+                <div class="pay-name">BNI Virtual Account</div>
+              </div>
+              <div class="pay-option" onclick="selectPayment(this, 'BRI Virtual Account')">
+                <div class="pay-icon">🏛️</div>
+                <div class="pay-name">BRI Virtual Account</div>
+              </div>
+              <div class="pay-option" onclick="selectPayment(this, 'Alfamart / Indomaret')">
+                <div class="pay-icon">🏪</div>
+                <div class="pay-name">Alfamart / Indomaret</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Kolom Kanan: Ringkasan & Tombol Bayar -->
+        <div class="checkout-right">
+          <div class="summary-card">
+            <h3 class="summary-title">Ringkasan Pemesanan</h3>
+
+            <div class="summary-item highlight">
+              <span id="sumPkgName">Paket Konsultasi &amp; Survey Lokasi</span>
+            </div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:14px;" id="sumPkgDesc">
+              Survey fisik ke lokasi, analisa topografi lahan &amp; konsultasi tatap muka langsung.
+            </div>
+
+            <div class="summary-item">
+              <span>Metode Bayar:</span>
+              <strong id="sumPayMethod" style="color:var(--text-pure);">QRIS Real-Time</strong>
+            </div>
+
+            <div class="summary-item">
+              <span>Biaya Layanan:</span>
+              <span id="sumSubtotal">Rp 500.000</span>
+            </div>
+
+            <div class="summary-item">
+              <span>Biaya Transaksi Gateway:</span>
+              <span style="color:#10b981; font-weight:700;">GRATIS (Rp 0)</span>
+            </div>
+
+            <div class="summary-total">
+              <span class="summary-total-label">Total Tagihan:</span>
+              <span class="summary-total-val" id="sumTotal">Rp 500.000</span>
+            </div>
+
+            <div style="margin-top:20px; font-size:12px; color:var(--text-muted);">
+              <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer;">
+                <input type="checkbox" required style="accent-color:var(--gold-primary); margin-top:3px;">
+                <span>Saya menyetujui <a href="terms.html" target="_blank" style="color:var(--gold-primary);">Syarat &amp; Ketentuan</a> serta <a href="privacy.html" target="_blank" style="color:var(--gold-primary);">Kebijakan Privasi</a> FARKAN Consult.</span>
+              </label>
+            </div>
+
+            <button type="submit" class="btn-submit">
+              <span>💳 Lanjutkan Pembayaran (TriPay)</span>
+            </button>
+
+            <div class="trust-badges">
+              <div class="trust-item">
+                <span>🔒</span>
+                <span>Enkripsi SSL 256-Bit &amp; Lisensi Bank Indonesia</span>
+              </div>
+              <div class="trust-item">
+                <span>📄</span>
+                <span>Kwitansi resmi &amp; SPK proyek langsung terbit</span>
+              </div>
+              <div class="trust-item">
+                <span>💬</span>
+                <span>Konfirmasi langsung via WhatsApp 24/7</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2026 FARKAN Design &amp; Build (FARKAN Consult). Seluruh Hak Cipta Dilindungi.</p>
+      <p style="margin-top:6px;">
+        <a href="index.html">Beranda</a> &bull;
+        <a href="checkout.html">Checkout &amp; Pembayaran</a> &bull;
+        <a href="privacy.html">Kebijakan Privasi</a> &bull;
+        <a href="terms.html">Syarat &amp; Ketentuan</a> &bull;
+        <a href="https://wa.me/6282218055530" target="_blank">Kontak Admin WhatsApp</a>
+      </p>
+    </footer>
+  </div>
+
+  <!-- Modal Simulasi Invoice TriPay -->
+  <div id="invoiceModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="status-badge-pending">⏳ MENUNGGU PEMBAYARAN</div>
+      <h3 style="font-family:var(--font-heading); color:var(--text-pure); font-size:22px; margin-bottom:6px;">Invoice TriPay Diterbitkan</h3>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">Silakan selesaikan pembayaran sebelum batas waktu berakhir.</p>
+
+      <div style="background:#0b0d11; border-radius:12px; padding:12px; font-size:13px; margin-bottom:14px; text-align:left;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <span style="color:var(--text-muted);">No. Transaksi:</span>
+          <strong id="modalTrxId" style="color:var(--text-pure); font-family:monospace;">TRX-FC-20261020-0982</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <span style="color:var(--text-muted);">Klien:</span>
+          <strong id="modalClientName" style="color:var(--text-pure);">-</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+          <span style="color:var(--text-muted);">Paket:</span>
+          <strong id="modalPkgName" style="color:var(--gold-primary);">-</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between;">
+          <span style="color:var(--text-muted);">Total Bayar:</span>
+          <strong id="modalTotal" style="color:var(--gold-primary); font-size:16px;">Rp 500.000</strong>
+        </div>
+      </div>
+
+      <!-- Kode Bayar / VA Box -->
+      <div style="text-align:left; font-size:12px; color:var(--text-muted); margin-bottom:4px;">
+        Nomor Pembayaran / Kode VA (<span id="modalPayMethod">BCA Virtual Account</span>):
+      </div>
+      <div class="va-box">
+        <span class="va-num" id="modalVaNumber">8915082218055530</span>
+        <button type="button" class="btn-copy" onclick="copyVa()">Salin</button>
+      </div>
+
+      <div style="font-size:12px; color:#94a3b8; margin-bottom:20px; text-align:left; line-height:1.6;">
+        💡 <b>Instruksi Pembayaran:</b> Buka M-Banking / ATM Anda, pilih menu Transfer ke Virtual Account, masukkan nomor pembayaran di atas, dan konfirmasi nominal pembayaran. Pembayaran Anda akan otomatis terverifikasi.
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button type="button" onclick="confirmPaymentWhatsApp()" style="flex:1; background:#25D366; color:#fff; border:none; padding:12px; border-radius:10px; font-weight:700; cursor:pointer;">
+          💬 Konfirmasi via WhatsApp
+        </button>
+        <button type="button" onclick="closeModal()" style="flex:1; background:rgba(255,255,255,0.08); color:var(--text-pure); border:1px solid var(--border-light); padding:12px; border-radius:10px; font-weight:700; cursor:pointer;">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var currentPrice = 500000;
+    var currentPackage = 'Paket Konsultasi & Survey Lokasi Proyek';
+    var currentDesc = 'Survey fisik ke lokasi, analisa topografi lahan & konsultasi tatap muka';
+    var currentMethod = 'QRIS Real-Time';
+
+    function formatRupiah(num) {
+      return 'Rp ' + Number(num).toLocaleString('id-ID');
+    }
+
+    function selectPackage(el, name, price, desc) {
+      document.querySelectorAll('.pkg-option').forEach(function(item) {
+        item.classList.remove('active');
+        item.querySelector('input').checked = false;
+      });
+      el.classList.add('active');
+      el.querySelector('input').checked = true;
+
+      currentPrice = price;
+      currentPackage = name;
+      currentDesc = desc;
+
+      document.getElementById('sumPkgName').innerText = name;
+      document.getElementById('sumPkgDesc').innerText = desc;
+      document.getElementById('sumSubtotal').innerText = formatRupiah(price);
+      document.getElementById('sumTotal').innerText = formatRupiah(price);
+    }
+
+    function selectPayment(el, method) {
+      document.querySelectorAll('.pay-option').forEach(function(item) {
+        item.classList.remove('active');
+      });
+      el.classList.add('active');
+      currentMethod = method;
+      document.getElementById('sumPayMethod').innerText = method;
+    }
+
+    function handleCheckout(e) {
+      e.preventDefault();
+      var clientName = document.getElementById('clientName').value;
+      var clientPhone = document.getElementById('clientPhone').value;
+      var clientEmail = document.getElementById('clientEmail').value;
+      var projectLoc = document.getElementById('projectLocation').value;
+
+      var randTrx = 'TRX-FC-' + Math.floor(100000 + Math.random() * 900000);
+      var randVa = '8915' + clientPhone.replace(/\D/g, '').slice(-10);
+      if (randVa.length < 10) randVa = '8915082218055530';
+
+      document.getElementById('modalTrxId').innerText = randTrx;
+      document.getElementById('modalClientName').innerText = clientName;
+      document.getElementById('modalPkgName').innerText = currentPackage;
+      document.getElementById('modalTotal').innerText = formatRupiah(currentPrice);
+      document.getElementById('modalPayMethod').innerText = currentMethod;
+      document.getElementById('modalVaNumber').innerText = randVa;
+
+      document.getElementById('invoiceModal').style.display = 'flex';
+    }
+
+    function copyVa() {
+      var num = document.getElementById('modalVaNumber').innerText;
+      navigator.clipboard.writeText(num);
+      alert('Nomor pembayaran berhasil disalin: ' + num);
+    }
+
+    function closeModal() {
+      document.getElementById('invoiceModal').style.display = 'none';
+    }
+
+    function confirmPaymentWhatsApp() {
+      var clientName = document.getElementById('clientName').value;
+      var trxId = document.getElementById('modalTrxId').innerText;
+      var text = 'Halo Admin FARKAN Consult, saya ingin konfirmasi pembayaran order jasa konstruksi/desain.\n\nNo. Invoice: ' + trxId + '\nNama: ' + clientName + '\nPaket: ' + currentPackage + '\nTotal: ' + formatRupiah(currentPrice) + '\nMetode: ' + currentMethod + '\n\nMohon dicek ya, terima kasih.';
+      var url = 'https://wa.me/6282218055530?text=' + encodeURIComponent(text);
+      window.open(url, '_blank');
+    }
+
+    // Auto-select package via URL Query: ?paket=arsitektur / ?paket=interior / ?paket=konstruksi
+    window.addEventListener('DOMContentLoaded', function() {
+      var params = new URLSearchParams(window.location.search);
+      var paket = params.get('paket') || params.get('service');
+      var options = document.querySelectorAll('.pkg-option');
+      if (paket === 'arsitektur' && options[1]) {
+        options[1].click();
+      } else if (paket === 'interior' && options[2]) {
+        options[2].click();
+      } else if (paket === 'rab' && options[3]) {
+        options[3].click();
+      } else if (paket === 'konstruksi' && options[4]) {
+        options[4].click();
+      }
+    });
+  </script>
+</body>
+</html>
